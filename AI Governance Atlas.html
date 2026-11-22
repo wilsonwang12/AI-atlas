@@ -1,0 +1,359 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AI Governance Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;800&display=swap">
+<style>
+/* Layout concept: a black briefing room. Wide world map beside a detail panel, then four hoverable charts, then sources. One blue ramp carries all meaning. */
+:root {
+  --bg: #05080f;
+  --surface: #0b1730;
+  --surface-2: #101f40;
+  --line: #1e2f55;
+  --fg: #f2f6ff;
+  --muted: #9fb1d1;
+  --blue: #2f7bff;
+  --sky: #7db8ff;
+  --lv1: #5fa2ff;
+  --lv2: #2f6fe0;
+  --lv3: #1f4aa3;
+  --lv4: #17306b;
+  --lv0: #0e1a35;
+  --font: "Raleway", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  font-variant-numeric: lining-nums tabular-nums;
+  padding-block: 32px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.12; }
+h1 { font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; }
+h1 em { font-style: normal; color: var(--blue); }
+h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--sky); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+.eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sky); }
+header { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
+header p { color: var(--muted); font-size: 1.05rem; }
+section { display: flex; flex-direction: column; gap: 20px; }
+.sec-head { display: flex; flex-direction: column; gap: 6px; }
+.sec-head p { color: var(--muted); max-width: 62ch; }
+
+/* map */
+.atlas { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.map-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; min-width: 0; }
+#map { width: 100%; aspect-ratio: 2 / 1; position: relative; max-width: 100%; }
+#map-fallback { color: var(--muted); padding: 24px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 6px 4px; font-size: 0.82rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+.datamaps-subunit { cursor: default; }
+.datamaps-subunit.hit { cursor: pointer; }
+.datamaps-subunit.sel { stroke: #ffffff !important; stroke-width: 1.6px !important; }
+.datamaps-hoverover { background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-family: var(--font); font-size: 0.85rem; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.chip { align-self: flex-start; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); }
+.panel h3 { font-size: 1.4rem; font-weight: 800; }
+.panel .lead { color: var(--fg); font-weight: 500; }
+.panel ul { margin: 0; padding-left: 1.1rem; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; }
+.panel .src { font-size: 0.82rem; color: var(--muted); }
+.jur-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.jur-list button { font: inherit; font-size: 0.85rem; font-weight: 500; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.jur-list button i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.jur-list button:hover { border-color: var(--blue); }
+.jur-list button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+/* charts */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button { font: inherit; font-size: 0.88rem; font-weight: 600; padding: 9px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; }
+.tabs button:hover { color: var(--fg); border-color: var(--blue); }
+.tabs button[aria-selected="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.chart-card .sub { color: var(--muted); font-size: 0.9rem; }
+.hbars { display: flex; flex-direction: column; gap: 18px; }
+.hrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: end; }
+.hrow .lab { font-size: 0.95rem; }
+.hrow .val { font-size: 1.4rem; font-weight: 800; }
+.track { grid-column: 1 / -1; height: 14px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.fill { height: 100%; background: var(--blue); border-radius: 0 4px 4px 0; transition: background 0.15s; }
+.hrow:hover .fill { background: var(--sky); }
+.cols { display: flex; align-items: flex-end; gap: 28px; height: 240px; padding: 0 8px; border-bottom: 1px solid var(--line); }
+.colw { flex: 1; max-width: 160px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 8px; }
+.colw .v { text-align: center; font-size: 1.5rem; font-weight: 800; }
+.colw .bar { background: var(--blue); border-radius: 4px 4px 0 0; transition: background 0.15s; }
+.colw:hover .bar { background: var(--sky); }
+.xl { display: flex; gap: 28px; padding: 8px 8px 0; }
+.xl span { flex: 1; max-width: 160px; text-align: center; color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+svg.line { width: 100%; height: auto; max-width: 100%; display: block; }
+svg.line text { font-family: var(--font); fill: var(--muted); font-size: 12px; }
+svg.line .vl { fill: var(--fg); font-weight: 800; font-size: 15px; }
+svg.line circle { cursor: pointer; }
+.note { color: var(--muted); font-size: 0.9rem; max-width: 70ch; }
+details { color: var(--muted); font-size: 0.88rem; }
+details summary { cursor: pointer; color: var(--sky); }
+table { border-collapse: collapse; margin-top: 10px; min-width: 260px; }
+th, td { text-align: left; padding: 6px 18px 6px 0; border-bottom: 1px solid var(--line); }
+th { color: var(--fg); font-weight: 600; }
+.tbl { overflow-x: auto; }
+.cite { font-size: 0.8rem; color: var(--muted); }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; max-width: 260px; }
+.sources { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 10px; color: var(--muted); font-size: 0.92rem; }
+.sources a { word-break: break-word; }
+footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
+@media (max-width: 860px) {
+  .atlas { grid-template-columns: minmax(0, 1fr); }
+  .cols, .xl { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">AI, society and democracy</span>
+    <h1>How the world is <em>governing</em> AI</h1>
+    <p>Select a country or a jurisdiction to see what binds AI developers there, then look at the numbers behind the debate. Status as reported by the sources listed at the bottom, checked on 20 November 2026.</p>
+  </header>
+
+  <section aria-labelledby="map-h">
+    <div class="sec-head">
+      <h2 id="map-h">Who has rules, and how strong they are</h2>
+      <p>Eight jurisdictions assessed. Countries shaded as unassessed are not rated, which does not mean they have no rules.</p>
+    </div>
+    <div class="atlas">
+      <div class="map-card">
+        <div id="map"><p id="map-fallback" hidden>The map library did not load. The jurisdiction buttons and the panel still work.</p></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="panel" aria-live="polite">
+        <div class="jur-list" id="jur-list" role="group" aria-label="Jurisdictions"></div>
+        <span class="chip" id="p-chip"></span>
+        <h3 id="p-name"></h3>
+        <p class="lead" id="p-lead"></p>
+        <ul id="p-facts"></ul>
+        <p class="src" id="p-src"></p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="chart-h">
+    <div class="sec-head">
+      <h2 id="chart-h">The numbers behind the debate</h2>
+      <p>Hover or focus a bar or point for its value. Every chart has a data table under it.</p>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="chart-card" id="chart-card"></div>
+  </section>
+
+  <section aria-labelledby="src-h">
+    <div class="sec-head"><h2 id="src-h">Sources</h2></div>
+    <ol class="sources">
+      <li>Stanford Institute for Human-Centered Artificial Intelligence (2026) <em>The 2026 AI Index Report</em>, chapters 3 and 8. <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener">hai.stanford.edu/ai-index/2026-ai-index-report</a></li>
+      <li>Gillespie, N. et al. (2025) <em>Trust, attitudes and use of AI: Australia snapshot</em>. University of Melbourne and KPMG. <a href="https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/2025/05/trust-attitudes-and-use-of-ai-australia-snapshot.pdf" target="_blank" rel="noopener">KPMG snapshot (PDF)</a></li>
+      <li>Department of Defence et al. (2026) <em>New Australian AI safety and security protections</em>, 10 November. <a href="https://www.minister.defence.gov.au/media-releases/2026-11-10/new-australian-ai-safety-security-protections" target="_blank" rel="noopener">minister.defence.gov.au</a></li>
+      <li>Gibson Dunn (2026) <em>EU AI Act omnibus agreement: postponed high-risk deadlines and other key changes</em>. <a href="https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/" target="_blank" rel="noopener">gibsondunn.com</a></li>
+      <li>Cooley (2026) <em>South Korea's AI Basic Act: overview and key takeaways</em>, 27 January. <a href="https://www.cooley.com/news/insight/2026/2026-01-27-south-koreas-ai-basic-act-overview-and-key-takeaways" target="_blank" rel="noopener">cooley.com</a></li>
+      <li>PPC Land (n.d.) <em>Asia's AI laws are finally here and they couldn't be more different</em>. <a href="https://ppc.land/asias-ai-laws-are-finally-here-and-they-couldnt-be-more-different/" target="_blank" rel="noopener">ppc.land</a></li>
+      <li>White &amp; Case (2025) <em>AI Watch: global regulatory tracker, United Kingdom</em>, 25 November. <a href="https://whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-united-kingdom" target="_blank" rel="noopener">whitecase.com</a></li>
+      <li>White &amp; Case (2026) <em>AI Watch: global regulatory tracker, India</em>, 24 April. <a href="https://www.whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-india" target="_blank" rel="noopener">whitecase.com</a></li>
+      <li>Cullen International (2026) <em>Global trends in AI regulation</em>, July. <a href="https://www.cullen-international.com/news/2026/07/Global-trends-in-AI-regulation.html" target="_blank" rel="noopener">cullen-international.com</a></li>
+    </ol>
+  </section>
+
+  <footer>Figures and statuses are reproduced from the sources above and no estimates are added. Laws change, so check the source before relying on a status. The UK entry reflects a tracker dated November 2025.</footer>
+</div>
+<div id="tip" role="tooltip" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.world.min.js"></script>
+<script>
+(function () {
+  var COL = { L1: "#5fa2ff", L2: "#2f6fe0", L3: "#1f4aa3", L4: "#17306b", L0: "#0e1a35" };
+  var LEVELS = {
+    L1: "Comprehensive AI law in force",
+    L2: "Mandatory rules announced",
+    L3: "Targeted binding rules, no single AI law",
+    L4: "Promotion or principles led"
+  };
+  var EU = ["AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE"];
+  var JUR = [
+    { id: "eu", name: "European Union", codes: EU, lvl: "L1",
+      lead: "The AI Act is law and is being phased in.",
+      facts: ["Banned AI practices have applied since 2 February 2025.", "Rules for general-purpose AI models have applied since 2 August 2025.", "A provisional deal on 6 May 2026 delays high-risk rules: stand-alone systems to 2 December 2027 and product-embedded systems to 2 August 2028. The new dates take effect after formal adoption."],
+      src: "Gibson Dunn (2026)" },
+    { id: "kr", name: "South Korea", codes: ["KOR"], lvl: "L1",
+      lead: "The AI Basic Act took effect on 22 January 2026.",
+      facts: ["Realistic AI-generated sound, images and video must be labelled.", "Very high-compute systems (10^26 FLOPs or more) need a risk management plan and reporting to the science ministry.", "Fines of up to 30 million won apply, with a one-year grace period signalled before fines start."],
+      src: "Cooley (2026); PPC Land (n.d.)" },
+    { id: "au", name: "Australia", codes: ["AUS"], lvl: "L2",
+      lead: "On 10 November 2026 the Government announced mandatory protections for frontier AI companies.",
+      facts: ["To be written into the Australian AI Standards and to apply to every frontier AI company that wants to operate in Australia.", "Covers security controls, risk management, independent evaluation of models, rapid incident notification and published safety frameworks.", "A new targeted regulator with significant penalties is proposed. The legislation itself is still to come."],
+      src: "Department of Defence et al. (2026)" },
+    { id: "us", name: "United States", codes: ["USA"], lvl: "L3",
+      lead: "No comprehensive federal AI law, but a growing body of rules.",
+      facts: ["States enacted 150 AI-related laws in 2025, up from fewer than 10 in 2020.", "Federal agencies took 58 AI-related regulatory actions in 2025, up from 1 in 2016.", "The federal approach actively discourages state-level rules."],
+      src: "Stanford HAI (2026); Cullen International (2026)" },
+    { id: "cn", name: "China", codes: ["CHN"], lvl: "L3",
+      lead: "Binding AI obligations added through existing laws and secondary legislation.",
+      facts: ["Cited as the most extensive example of this approach.", "The source gives no individual instruments or dates, so none are listed here."],
+      src: "Cullen International (2026)" },
+    { id: "in", name: "India", codes: ["IND"], lvl: "L3",
+      lead: "No AI-specific law, but binding rules on synthetic media.",
+      facts: ["A February 2026 amendment to the IT Rules requires synthetic audio-visual content to be labelled and carry permanent metadata.", "The Digital India Act has been in draft since 2023.", "The November 2025 AI Governance Guidelines are not binding."],
+      src: "White & Case (2026)" },
+    { id: "jp", name: "Japan", codes: ["JPN"], lvl: "L4",
+      lead: "The AI Promotion Act (in effect 4 June 2025) backs AI development rather than restricting it.",
+      facts: ["Sets up an AI Strategy Headquarters chaired by the Prime Minister.", "Sets no mandatory approvals, risk tiers, fines or enforcement powers."],
+      src: "PPC Land (n.d.)" },
+    { id: "gb", name: "United Kingdom", codes: ["GBR"], lvl: "L4",
+      lead: "No AI statute. Existing regulators apply five shared principles.",
+      facts: ["Regulators such as the FCA, ICO, Ofcom and the CMA each set their own approach.", "Binding measures for the most powerful models were proposed, but details were unclear.", "Based on a tracker dated November 2025, so check for later changes."],
+      src: "White & Case (2025)" }
+  ];
+  var byCode = {}, byId = {}, mapData = {};
+  JUR.forEach(function (j) {
+    byId[j.id] = j;
+    j.codes.forEach(function (c) { byCode[c] = j; mapData[c] = { fillKey: j.lvl, label: j.name + ": " + LEVELS[j.lvl] }; });
+  });
+
+  var $ = function (id) { return document.getElementById(id); };
+  var tip = $("tip");
+  function showTip(e, html) {
+    tip.innerHTML = html; tip.hidden = false;
+    var x = Math.min(e.clientX + 14, window.innerWidth - 270);
+    tip.style.left = Math.max(8, x) + "px"; tip.style.top = (e.clientY + 14) + "px";
+  }
+  function hideTip() { tip.hidden = true; }
+  document.addEventListener("mousemove", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-tip]") : null;
+    if (t) showTip(e, t.getAttribute("data-tip")); else hideTip();
+  });
+  document.addEventListener("focusin", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-tip]") : null;
+    if (t) { var r = t.getBoundingClientRect(); showTip({ clientX: r.left, clientY: r.top - 40 }, t.getAttribute("data-tip")); }
+  });
+  document.addEventListener("focusout", hideTip);
+
+  // legend and jurisdiction buttons
+  $("legend").innerHTML = ["L1","L2","L3","L4","L0"].map(function (k) {
+    return '<span><i style="background:' + COL[k] + '"></i>' + (LEVELS[k] || "Not assessed here") + "</span>";
+  }).join("");
+  $("jur-list").innerHTML = JUR.map(function (j) {
+    return '<button type="button" data-id="' + j.id + '" aria-pressed="false"><i style="background:' + COL[j.lvl] + '"></i>' + j.name + "</button>";
+  }).join("");
+  $("jur-list").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (b) select(b.getAttribute("data-id"));
+  });
+
+  var dm = null;
+  function select(id) {
+    var j = byId[id]; if (!j) return;
+    $("p-chip").textContent = LEVELS[j.lvl];
+    $("p-chip").style.borderColor = COL[j.lvl];
+    $("p-name").textContent = j.name;
+    $("p-lead").textContent = j.lead;
+    $("p-facts").innerHTML = j.facts.map(function (f) { return "<li>" + f + "</li>"; }).join("");
+    $("p-src").textContent = "Source: " + j.src;
+    Array.prototype.forEach.call($("jur-list").children, function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-id") === id)); });
+    if (dm && window.d3) {
+      d3.selectAll("#map .datamaps-subunit").classed("sel", function (g) { return j.codes.indexOf(g.id) > -1; });
+    }
+  }
+
+  function buildMap() {
+    if (!window.Datamap) { $("map-fallback").hidden = false; return; }
+    try {
+      dm = new Datamap({
+        element: $("map"),
+        responsive: true,
+        fills: { defaultFill: COL.L0, L1: COL.L1, L2: COL.L2, L3: COL.L3, L4: COL.L4, L0: COL.L0 },
+        data: mapData,
+        geographyConfig: {
+          borderColor: "#05080f", borderWidth: 0.5,
+          highlightFillColor: function (d) { return d && d.fillKey ? "#7db8ff" : "#16254a"; },
+          highlightBorderColor: "#ffffff", highlightBorderWidth: 1,
+          popupTemplate: function (geo, data) {
+            return '<div class="hoverinfo"><strong>' + geo.properties.name + "</strong>" + (data && data.label ? "<br>" + LEVELS[data.fillKey] : "<br>Not assessed here") + "</div>";
+          }
+        },
+        done: function (m) {
+          m.svg.selectAll(".datamaps-subunit").each(function (g) { if (byCode[g.id]) d3.select(this).classed("hit", true); })
+            .on("click", function (g) { var j = byCode[g.id]; if (j) select(j.id); });
+          select(currentId);
+        }
+      });
+      window.addEventListener("resize", function () { dm.resize(); });
+    } catch (err) { $("map-fallback").hidden = false; }
+  }
+  var currentId = "au";
+  select(currentId);
+  buildMap();
+
+  // charts
+  var CH = [
+    { id: "opinion", tab: "Public opinion", kind: "h", title: "What Australians think about AI", sub: "Share of Australians surveyed, 2025", unit: "%", max: 100,
+      rows: [["Believe AI regulation is required", 77], ["Concerned that elections could be manipulated by AI content or bots", 57], ["Willing to trust AI", 36], ["Believe current safeguards are adequate", 30]],
+      note: "Most Australians want regulation, and fewer than a third think today's safeguards are enough.", cite: "Source: Gillespie et al. (2025), University of Melbourne and KPMG." },
+    { id: "incidents", tab: "AI incidents", kind: "c", title: "Reported AI incidents", sub: "Incidents logged in the AI Incident Database per year", unit: "", max: 400,
+      rows: [["2024", 233], ["2025", 362]],
+      note: "Up about 55% in one year. Before 2022 the yearly count stayed under 100.", cite: "Source: Stanford HAI (2026), AI Index chapter 3." },
+    { id: "rules", tab: "US rule-making", kind: "c", title: "US federal AI-related regulatory actions", sub: "Actions per year", unit: "", max: 70,
+      rows: [["2016", 1], ["2025", 58]],
+      note: "At state level, AI-related laws enacted rose from fewer than 10 in 2020 to 150 in 2025 (California 20, Texas 12, New York 10 in 2025).", cite: "Source: Stanford HAI (2026), AI Index chapter 8." },
+    { id: "hearings", tab: "Congress hearings", kind: "l", title: "Witnesses at US congressional AI hearings", sub: "Only the years reported in the source are plotted", unit: "", max: 150,
+      rows: [[2017, 5], [2022, 18], [2023, 131], [2025, 102]],
+      note: "Industry's share of witnesses rose from 13% to 37% between the 115th and 119th Congresses, while government's fell from 35% to 10%.", cite: "Source: Stanford HAI (2026), AI Index chapter 8." }
+  ];
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function fmt(c, v) { return v + (c.unit || ""); }
+  function render(c) {
+    var body = "";
+    if (c.kind === "h") {
+      body = '<div class="hbars">' + c.rows.map(function (r) {
+        return '<div class="hrow" tabindex="0" data-tip="' + esc(r[0]) + ": " + fmt(c, r[1]) + '"><span class="lab">' + esc(r[0]) + '</span><span class="val">' + fmt(c, r[1]) + '</span><div class="track"><div class="fill" style="width:' + (r[1] / c.max * 100) + '%"></div></div></div>';
+      }).join("") + "</div>";
+    } else if (c.kind === "c") {
+      body = '<div class="cols">' + c.rows.map(function (r) {
+        return '<div class="colw" tabindex="0" data-tip="' + r[0] + ": " + r[1] + '"><span class="v">' + r[1] + '</span><div class="bar" style="height:' + (r[1] / c.max * 78) + '%"></div></div>';
+      }).join("") + '</div><div class="xl">' + c.rows.map(function (r) { return "<span>" + r[0] + "</span>"; }).join("") + "</div>";
+    } else {
+      var W = 560, H = 270, L = 40, R = 24, T = 28, B = 36, x0 = 2017, x1 = 2025;
+      var sx = function (x) { return L + (x - x0) / (x1 - x0) * (W - L - R); };
+      var sy = function (y) { return H - B - y / c.max * (H - B - T); };
+      var g = "";
+      [0, 50, 100, 150].forEach(function (t) { g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + sy(t) + '" y2="' + sy(t) + '" stroke="#1e2f55" stroke-width="1"/><text x="' + (L - 8) + '" y="' + (sy(t) + 4) + '" text-anchor="end">' + t + "</text>"; });
+      [2017, 2019, 2021, 2023, 2025].forEach(function (t) { g += '<text x="' + sx(t) + '" y="' + (H - 12) + '" text-anchor="middle">' + t + "</text>"; });
+      var pts = c.rows.map(function (r) { return sx(r[0]) + "," + sy(r[1]); }).join(" ");
+      g += '<polyline points="' + pts + '" fill="none" stroke="#2f7bff" stroke-width="2.5"/>';
+      c.rows.forEach(function (r) {
+        g += '<circle cx="' + sx(r[0]) + '" cy="' + sy(r[1]) + '" r="7" fill="#2f7bff" stroke="#0b1730" stroke-width="2" tabindex="0" data-tip="' + r[0] + ": " + r[1] + ' witnesses"/>';
+        g += '<text class="vl" x="' + sx(r[0]) + '" y="' + (sy(r[1]) - 14) + '" text-anchor="middle">' + r[1] + "</text>";
+      });
+      body = '<svg class="line" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(c.title) + '">' + g + "</svg>";
+    }
+    var tbl = '<div class="tbl"><table><thead><tr><th>' + (c.kind === "h" ? "Measure" : "Year") + "</th><th>Value</th></tr></thead><tbody>" + c.rows.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + fmt(c, r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+    $("chart-card").innerHTML = "<div><h3>" + esc(c.title) + '</h3><p class="sub">' + esc(c.sub) + "</p></div>" + body + '<p class="note">' + esc(c.note) + "</p><details><summary>Data table</summary>" + tbl + '</details><p class="cite">' + esc(c.cite) + "</p>";
+  }
+  $("tabs").innerHTML = CH.map(function (c, i) { return '<button type="button" role="tab" data-i="' + i + '" aria-selected="' + (i === 0) + '">' + c.tab + "</button>"; }).join("");
+  $("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    Array.prototype.forEach.call($("tabs").children, function (x) { x.setAttribute("aria-selected", String(x === b)); });
+    render(CH[+b.getAttribute("data-i")]);
+  });
+  render(CH[0]);
+})();
+</script>
+
+</body></html>
