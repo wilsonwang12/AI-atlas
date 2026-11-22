@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>AI Governance Atlas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,11 +30,29 @@ body {
   font-size: 16px;
   line-height: 1.55;
   font-variant-numeric: lining-nums tabular-nums;
-  padding-block: 32px 56px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  margin: 0;
 }
-.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+.band { color: var(--fg); scroll-margin-top: 46px; }
+.inner { max-width: 1160px; margin: 0 auto; position: relative; display: flex; flex-direction: column; gap: 28px; padding-block: 56px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.inner > :not(.ghost) { position: relative; z-index: 1; }
+.ghost { position: absolute; top: 20px; right: max(16px, env(safe-area-inset-right, 0px)); font-size: clamp(96px, 20vw, 220px); font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--ghost); pointer-events: none; user-select: none; z-index: 0; }
+.chap { display: flex; align-items: center; gap: 12px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sky); }
+.chap b { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 34px; background: var(--blue); color: #fff; font-size: 0.95rem; letter-spacing: 0; }
+.b-hero { background: #2f7bff; --fg: #ffffff; --muted: #e3eeff; --sky: #05080f; }
+.b-hero .chap b { background: #05080f; }
+.b-hero h1 em { color: #05080f; }
+.b-hero .inner { padding-block: 64px 72px; }
+.b-map { --surface: #05080f; --surface-2: #101f40; --line: #223a6b; --ghost: #17306b; background: #0b1730; }
+.b-num { --ghost: #10204a; background: #05080f; }
+.b-src { --fg: #05080f; --muted: #34476b; --sky: #1b4fb8; --line: #a9c3ea; --ghost: #c4d8f5; background: #dceaff; }
+.b-src .chap b { background: #05080f; }
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: #05080f; border-bottom: 1px solid #1e2f55; }
+nav.top .in { max-width: 1160px; margin: 0 auto; display: flex; flex-wrap: wrap; padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+nav.top button { font: inherit; font-size: 0.85rem; font-weight: 600; color: #9fb1d1; background: none; border: 0; padding: 14px 16px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
+nav.top button b { color: #7db8ff; }
+nav.top button:hover { color: #ffffff; }
+nav.top button.on { color: #ffffff; box-shadow: inset 0 -3px 0 #2f7bff; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: #05080f; }
 h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.12; }
 h1 { font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; }
 h1 em { font-style: normal; color: var(--blue); }
@@ -53,46 +70,48 @@ section { display: flex; flex-direction: column; gap: 20px; }
 
 /* map */
 .atlas { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 20px; align-items: start; }
-.map-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; min-width: 0; }
+.map-card { background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: 12px; min-width: 0; }
 #map { width: 100%; aspect-ratio: 2 / 1; position: relative; max-width: 100%; }
 #map-fallback { color: var(--muted); padding: 24px; }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 6px 4px; font-size: 0.82rem; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 8px; }
-.legend i { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+.legend i { width: 14px; height: 14px; border-radius: 0; border: 1px solid var(--line); display: inline-block; }
 .datamaps-subunit { cursor: default; }
 .datamaps-subunit.hit { cursor: pointer; }
-.datamaps-subunit.sel { stroke: #ffffff !important; stroke-width: 1.6px !important; }
-.datamaps-hoverover { background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-family: var(--font); font-size: 0.85rem; }
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.chip { align-self: flex-start; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); }
+@media (hover: hover) { .datamaps-subunit.hit:hover { stroke: #ffffff !important; stroke-width: 1.4px !important; filter: brightness(1.3); } }
+.datamaps-hoverover { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; font-family: var(--font); }
+.map-tip, .datamaps-hoverover .hoverinfo { background: #101f40 !important; color: #ffffff !important; border: 1px solid #2f7bff !important; box-shadow: none !important; padding: 8px 12px !important; font-family: var(--font); font-size: 0.85rem; line-height: 1.4; border-radius: 0; }
+.map-tip strong { display: block; font-size: 0.95rem; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.chip { align-self: flex-start; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 0; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); }
 .panel h3 { font-size: 1.4rem; font-weight: 800; }
 .panel .lead { color: var(--fg); font-weight: 500; }
 .panel ul { margin: 0; padding-left: 1.1rem; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; }
 .panel .src { font-size: 0.82rem; color: var(--muted); }
 .jur-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.jur-list button { font: inherit; font-size: 0.85rem; font-weight: 500; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-.jur-list button i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.jur-list button { font: inherit; font-size: 0.85rem; font-weight: 500; padding: 7px 12px; border-radius: 0; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.jur-list button i { width: 10px; height: 10px; border-radius: 0; display: inline-block; }
 .jur-list button:hover { border-color: var(--blue); }
 .jur-list button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
 
 /* charts */
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.tabs button { font: inherit; font-size: 0.88rem; font-weight: 600; padding: 9px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; }
+.tabs button { font: inherit; font-size: 0.88rem; font-weight: 600; padding: 9px 14px; border-radius: 0; border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; }
 .tabs button:hover { color: var(--fg); border-color: var(--blue); }
 .tabs button[aria-selected="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
-.chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .chart-card .sub { color: var(--muted); font-size: 0.9rem; }
 .hbars { display: flex; flex-direction: column; gap: 18px; }
 .hrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: end; }
 .hrow .lab { font-size: 0.95rem; }
 .hrow .val { font-size: 1.4rem; font-weight: 800; }
-.track { grid-column: 1 / -1; height: 14px; background: var(--bg); border-radius: 3px; overflow: hidden; }
-.fill { height: 100%; background: var(--blue); border-radius: 0 4px 4px 0; transition: background 0.15s; }
+.track { grid-column: 1 / -1; height: 14px; background: var(--bg); border-radius: 0; overflow: hidden; }
+.fill { height: 100%; background: var(--blue); border-radius: 0; transition: background 0.15s; }
 .hrow:hover .fill { background: var(--sky); }
 .cols { display: flex; align-items: flex-end; gap: 28px; height: 240px; padding: 0 8px; border-bottom: 1px solid var(--line); }
 .colw { flex: 1; max-width: 160px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 8px; }
 .colw .v { text-align: center; font-size: 1.5rem; font-weight: 800; }
-.colw .bar { background: var(--blue); border-radius: 4px 4px 0 0; transition: background 0.15s; }
+.colw .bar { background: var(--blue); border-radius: 0; transition: background 0.15s; }
 .colw:hover .bar { background: var(--sky); }
 .xl { display: flex; gap: 28px; padding: 8px 8px 0; }
 .xl span { flex: 1; max-width: 160px; text-align: center; color: var(--muted); font-size: 0.9rem; font-weight: 600; }
@@ -108,7 +127,7 @@ th, td { text-align: left; padding: 6px 18px 6px 0; border-bottom: 1px solid var
 th { color: var(--fg); font-weight: 600; }
 .tbl { overflow-x: auto; }
 .cite { font-size: 0.8rem; color: var(--muted); }
-#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; max-width: 260px; }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); padding: 6px 10px; border-radius: 0; font-size: 0.85rem; max-width: 260px; }
 .sources { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 10px; color: var(--muted); font-size: 0.92rem; }
 .sources a { word-break: break-word; }
 footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
@@ -119,14 +138,19 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
-<div class="wrap">
-  <header>
-    <span class="eyebrow">AI, society and democracy</span>
+<nav class="top" aria-label="Chapters"><div class="in">
+<button type="button" data-t="start" class="on"><b>00</b> Briefing</button>
+<button type="button" data-t="map"><b>01</b> Map</button>
+<button type="button" data-t="numbers"><b>02</b> Numbers</button>
+<button type="button" data-t="sources"><b>03</b> Sources</button>
+</div></nav>
+<div class="band b-hero" id="band-start"><div class="inner"><header>
+<div class="chap"><b>00</b> Briefing</div>
+<span class="eyebrow">AI, society and democracy</span>
     <h1>How the world is <em>governing</em> AI</h1>
     <p>Select a country or a jurisdiction to see what binds AI developers there, then look at the numbers behind the debate. Status as reported by the sources listed at the bottom, checked on 20 November 2026.</p>
-  </header>
-
-  <section aria-labelledby="map-h">
+  </header></div></div>
+<div class="band b-map" id="band-map"><div class="inner"><div class="ghost" aria-hidden="true">01</div><div class="chap"><b>01</b> The map</div><section aria-labelledby="map-h">
     <div class="sec-head">
       <h2 id="map-h">Who has rules, and how strong they are</h2>
       <p>Eight jurisdictions assessed. Countries shaded as unassessed are not rated, which does not mean they have no rules.</p>
@@ -145,18 +169,16 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
         <p class="src" id="p-src"></p>
       </div>
     </div>
-  </section>
-
-  <section aria-labelledby="chart-h">
+  </section></div></div>
+<div class="band b-num" id="band-numbers"><div class="inner"><div class="ghost" aria-hidden="true">02</div><div class="chap"><b>02</b> The numbers</div><section aria-labelledby="chart-h">
     <div class="sec-head">
       <h2 id="chart-h">The numbers behind the debate</h2>
       <p>Hover or focus a bar or point for its value. Every chart has a data table under it.</p>
     </div>
     <div class="tabs" role="tablist" id="tabs"></div>
     <div class="chart-card" id="chart-card"></div>
-  </section>
-
-  <section aria-labelledby="src-h">
+  </section></div></div>
+<div class="band b-src" id="band-sources"><div class="inner"><div class="ghost" aria-hidden="true">03</div><div class="chap"><b>03</b> Sources</div><section aria-labelledby="src-h">
     <div class="sec-head"><h2 id="src-h">Sources</h2></div>
     <ol class="sources">
       <li>Stanford Institute for Human-Centered Artificial Intelligence (2026) <em>The 2026 AI Index Report</em>, chapters 3 and 8. <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener">hai.stanford.edu/ai-index/2026-ai-index-report</a></li>
@@ -169,10 +191,7 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
       <li>White &amp; Case (2026) <em>AI Watch: global regulatory tracker, India</em>, 24 April. <a href="https://www.whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-india" target="_blank" rel="noopener">whitecase.com</a></li>
       <li>Cullen International (2026) <em>Global trends in AI regulation</em>, July. <a href="https://www.cullen-international.com/news/2026/07/Global-trends-in-AI-regulation.html" target="_blank" rel="noopener">cullen-international.com</a></li>
     </ol>
-  </section>
-
-  <footer>Figures and statuses are reproduced from the sources above and no estimates are added. Laws change, so check the source before relying on a status. The UK entry reflects a tracker dated November 2025.</footer>
-</div>
+  </section><footer>Figures and statuses are reproduced from the sources above and no estimates are added. Laws change, so check the source before relying on a status. The UK entry reflects a tracker dated November 2025.</footer></div></div>
 <div id="tip" role="tooltip" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
@@ -267,9 +286,6 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
     $("p-facts").innerHTML = j.facts.map(function (f) { return "<li>" + f + "</li>"; }).join("");
     $("p-src").textContent = "Source: " + j.src;
     Array.prototype.forEach.call($("jur-list").children, function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-id") === id)); });
-    if (dm && window.d3) {
-      d3.selectAll("#map .datamaps-subunit").classed("sel", function (g) { return j.codes.indexOf(g.id) > -1; });
-    }
   }
 
   function buildMap() {
@@ -282,10 +298,9 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
         data: mapData,
         geographyConfig: {
           borderColor: "#05080f", borderWidth: 0.5,
-          highlightFillColor: function (d) { return d && d.fillKey ? "#7db8ff" : "#16254a"; },
-          highlightBorderColor: "#ffffff", highlightBorderWidth: 1,
+          highlightOnHover: false,
           popupTemplate: function (geo, data) {
-            return '<div class="hoverinfo"><strong>' + geo.properties.name + "</strong>" + (data && data.label ? "<br>" + LEVELS[data.fillKey] : "<br>Not assessed here") + "</div>";
+            return '<div class="map-tip"><strong>' + geo.properties.name + "</strong>" + (data && data.label ? "<br>" + LEVELS[data.fillKey] : "<br>Not assessed here") + "</div>";
           }
         },
         done: function (m) {
@@ -353,7 +368,19 @@ footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
     render(CH[+b.getAttribute("data-i")]);
   });
   render(CH[0]);
+
+  var ids = ["start", "map", "numbers", "sources"];
+  var navBtns = Array.prototype.slice.call(document.querySelectorAll("nav.top button"));
+  document.querySelector("nav.top").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var el = $("band-" + b.getAttribute("data-t")); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  function onScroll() {
+    var cur = "start";
+    ids.forEach(function (id) { if ($("band-" + id).getBoundingClientRect().top <= 120) cur = id; });
+    navBtns.forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-t") === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 })();
 </script>
-
-</body></html>
